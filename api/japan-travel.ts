@@ -56,6 +56,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         당신은 일본 전문 여행 플래너입니다. ${startDate}부터 ${endDate}까지 ${destination}으로 떠나는 여행을 위한 상세한 계획을 세워주세요. 출발지는 대한민국 서울입니다.
         ${mustVisitText}
         ${hotelInstruction}
+        
+        **숙소와 맛집은 다양한 선택지를 제공할 수 있도록 각각 최소 5개 이상 추천해주세요.**
+
         논리적이고 효율적인 동선으로 일정을 계획하고, 모든 필수 방문 장소를 포함해야 합니다. 실용적이고 유용한 팁도 함께 제공해주세요.
         결과는 반드시 아래와 같은 JSON 형식으로만 제공해야 합니다. 다른 설명이나 markdown 포맷 없이 순수한 JSON 객체만 반환해주세요.
         {
@@ -71,13 +74,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const textResponse = result.response.text();
 
       try {
-        // --- ✨ 여기가 바로 수정한 부분입니다! ✨ ---
-        // 마크다운 코드 블록(` ```json ` 과 ` ``` `)을 제거합니다.
         const cleanedResponse = textResponse.replace(/^```json\s*|```\s*$/g, '');
-        // 깨끗해진 텍스트를 파싱합니다.
         const parsedJson: TravelPlan = JSON.parse(cleanedResponse);
-        // --- 수정 완료 ---
-        
         return res.status(200).json(parsedJson);
       } catch(e) {
         console.error("AI 응답을 JSON으로 파싱하는데 실패했습니다:", textResponse);
