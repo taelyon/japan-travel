@@ -3,7 +3,7 @@
     "target": "ES2022",
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
-    "module": "ESNext",
+    "module": "NodeNext",  /* 수정된 부분 */
     "lib": [
       "ES2022",
       "DOM",
@@ -13,7 +13,7 @@
     "types": [
       "node"
     ],
-    "moduleResolution": "nodenext",  /* 수정된 부분 */
+    "moduleResolution": "nodenext",
     "isolatedModules": true,
     "moduleDetection": "force",
     "allowJs": true,
@@ -23,7 +23,6 @@
         "./*"
       ]
     },
-    /* "allowImportingTsExtensions": true, 이 줄을 삭제했습니다. */
     "noEmit": true
   }
 }
