@@ -87,8 +87,8 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
   };
 
   return (
-    <div className="space-y-10 w-full">
-      <header className="text-center relative pt-4">
+    <div className="w-full divide-y divide-gray-200">
+      <header className="text-center relative pb-8">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-800 tracking-tight">{plan.tripTitle}</h1>
         <div className="flex items-center justify-center sm:justify-end gap-2 mt-4 sm:absolute sm:top-0 sm:right-0 sm:mt-0">
           <button
@@ -111,14 +111,14 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
         </div>
       </header>
       
-      <section>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+      <section className="py-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
           <CalendarIcon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
           상세 일정
         </h2>
         <div className="space-y-8">
           {plan.dailyItinerary.map((day, index) => (
-            <div key={index} className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
+            <div key={index} className="sm:bg-white sm:p-4 sm:p-6 rounded-xl sm:shadow-md sm:border sm:border-gray-200">
               <div className="mb-4">
                 <h3 className="text-xl sm:text-2xl font-bold text-rose-600">{day.day} <span className="text-gray-500 font-medium text-lg sm:text-xl">({day.date})</span></h3>
                 <p className="text-base sm:text-lg text-gray-600 italic">"{day.theme}"</p>
@@ -137,8 +137,8 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
         </div>
       </section>
 
-      <section className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+      <section className="py-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
               <IconMap.Flight className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
               항공권 조회
           </h2>
@@ -156,7 +156,7 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
           </a>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="py-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
         <RecommendationCard 
           title="숙소 추천" 
           Icon={IconMap.Hotel} 
@@ -169,8 +169,8 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
         />
       </div>
 
-       <section className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+       <section className="pt-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
              <IconMap.Transport className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
             교통편 가이드
           </h2>
@@ -195,8 +195,9 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ title, Icon, it
     };
 
     return (
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+        // ✨ 이 부분의 클래스를 수정했습니다.
+        <div className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-md sm:border sm:border-gray-200">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
                 <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
                 {title}
             </h2>
@@ -204,7 +205,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ title, Icon, it
                 {items.map((item, index) => (
                     <li 
                       key={index} 
-                      className="border-b border-gray-200 last:border-b-0 cursor-pointer hover:bg-rose-50 p-3 rounded-lg transition-colors"
+                      className="border-b border-gray-200 last:border-b-0 cursor-pointer hover:bg-rose-50 p-3 rounded-lg transition-colors -mx-3 sm:mx-0"
                       onClick={() => handleItemClick(item)}
                       role="button"
                       tabIndex={0}

@@ -193,7 +193,8 @@ function App() {
       
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <aside className="lg:col-span-4 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 self-start">
+          {/* ✨ 아래 aside 태그의 클래스를 수정했습니다. */}
+          <aside className="lg:col-span-4 lg:bg-white lg:p-6 lg:rounded-2xl lg:shadow-lg lg:border lg:border-gray-200 self-start">
             <div className="space-y-6">
               <div>
                 <label htmlFor="destination-select" className="block text-lg font-semibold mb-2 text-gray-700">1. 여행지 선택</label>
@@ -282,7 +283,8 @@ function App() {
             </div>
           </aside>
 
-          <section className="lg:col-span-8 bg-white/50 p-4 sm:p-6 rounded-2xl min-h-[60vh] flex items-center justify-center">
+          {/* ✨ 아래 section 태그의 클래스를 수정했습니다. */}
+          <section className="lg:col-span-8 lg:bg-white/50 lg:p-6 rounded-2xl min-h-[60vh] flex items-center justify-center">
              {searchResult || searchError || isSearching ? (
                  <div className="w-full">
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
