@@ -242,7 +242,7 @@ function App() {
                         onChange={(e) => setMustVisitInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddMustVisit()}
                         placeholder="예: 유아 동반, 해산물 맛집 위주"
-                        className="flex-grow p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400"
+                        className="flex-grow p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400 min-w-0"
                     />
                     <button onClick={handleAddMustVisit} className="bg-rose-500 text-white p-2 rounded-md hover:bg-rose-600 transition-colors">
                         <PlusIcon className="w-6 h-6"/>
