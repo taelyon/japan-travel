@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { put, list, del } from '@vercel/blob';
-import type { TravelPlan, Destination, SavedPlan } from './types';
+import type { SavedPlan } from './types';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -41,7 +41,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const { planId } = payload;
       const { blobs } = await list({ prefix: `plans/${planId}.json` });
       
-      if(blobs.length > 0) {
+      if (blobs.length > 0) {
+        // del 함수는 URL 배열을 받아 처리합니다.
         await del(blobs.map(blob => blob.url));
       }
 
@@ -51,6 +52,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(plans);
     }
 
+    // --- 이하 Gemini API 관련 코드는 동일 ---
     const API_KEY = process.env.GEMINI_API_KEY;
     if (!API_KEY) {
       return res.status(500).json({ error: "서버에 API 키가 설정되지 않았습니다." });
@@ -78,7 +80,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             ? `\n**숙소 추천에 대한 특별 요청:**\n- 오사카역, 난바역, 교토역 근처 중심으로 추천해주세요.\n- 중학생 딸과 함께 지내기 좋은 곳이어야 합니다.\n- 가성비를 가장 중요한 요소로 고려해주세요.`
             : `\n**숙소 추천에 대한 일반 요청:**\n- 교통이 편리한 중심가에 위치한 호텔을 추천해주세요.\n- 가성비를 중요한 요소로 고려해주세요.`;
         
-        // ✨ AI에게 보내는 프롬프트를 훨씬 더 명확하고 안정적으로 수정했습니다.
         const prompt = `
             당신은 일본 전문 여행 플래너입니다. ${startDate}부터 ${endDate}까지 ${destination}으로 떠나는 여행을 위한 상세한 계획을 세워주세요. 출발지는 대한민국 서울입니다.
             ${mustVisitText}
@@ -100,11 +101,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         try {
             const cleanedResponse = textResponse.replace(/^```json\s*|```\s*$/g, '');
-            const parsedJson: TravelPlan = JSON.parse(cleanedResponse);
+            const parsedJson = JSON.parse(cleanedResponse);
             return res.status(200).json(parsedJson);
         } catch (e) {
             console.error("AI 응답을 JSON으로 파싱하는데 실패했습니다:", textResponse);
-            // 사용자에게 더 친절한 에러 메시지를 보냅니다.
             return res.status(500).json({ error: "AI가 여행 계획을 생성하는 데 실패했습니다. 잠시 후 다시 시도해 주세요." });
         }
     }
