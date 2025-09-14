@@ -3,6 +3,7 @@ import { DESTINATIONS } from './constants';
 import { Destination } from './types';
 import type { TravelPlan, SavedPlan } from './types';
 import { generateTravelPlan, searchInformation } from './services/geminiService';
+import { getSavedPlans, savePlan, deletePlan as apiDeletePlan } from './services/planService';
 import LoadingSpinner from './components/LoadingSpinner';
 import PlanDisplay from './components/PlanDisplay';
 import SavedPlansModal from './components/SavedPlansModal';
@@ -11,42 +12,38 @@ import SearchResultDisplay from './components/SearchResultDisplay';
 const today = new Date().toISOString().split('T')[0];
 
 function App() {
+  // ... (기존 상태 변수 선언은 그대로)
   const [destination, setDestination] = useState<Destination | null>(null);
   const [startDate, setStartDate] = useState<string>(today);
   const [endDate, setEndDate] = useState<string>('');
   const [mustVisitInput, setMustVisitInput] = useState<string>('');
   const [mustVisitPlaces, setMustVisitPlaces] = useState<string[]>([]);
-  
   const [plan, setPlan] = useState<TravelPlan | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-
   const [savedPlans, setSavedPlans] = useState<SavedPlan[]>([]);
   const [isSavedPlansModalOpen, setIsSavedPlansModalOpen] = useState(false);
 
+  // ✨ useEffect를 수정하여 API에서 저장된 계획을 불러옵니다.
   useEffect(() => {
-    try {
-      const storedPlans = localStorage.getItem('japan-travel-plans');
-      if (storedPlans) {
-        setSavedPlans(JSON.parse(storedPlans));
+    const fetchPlans = async () => {
+      try {
+        const plans = await getSavedPlans();
+        setSavedPlans(plans);
+      } catch (e) {
+        console.error("Failed to load saved plans:", e);
+        // 사용자에게 에러를 알려주는 로직을 추가할 수 있습니다.
       }
-    } catch (e) {
-      console.error("Failed to load or parse saved plans:", e);
-      localStorage.removeItem('japan-travel-plans');
-    }
+    };
+    fetchPlans();
   }, []);
 
-  const updateSavedPlans = (newPlans: SavedPlan[]) => {
-    setSavedPlans(newPlans);
-    localStorage.setItem('japan-travel-plans', JSON.stringify(newPlans));
-  };
-
-  const handleSavePlan = useCallback(() => {
+  // ✨ handleSavePlan을 수정하여 API를 통해 계획을 저장합니다.
+  const handleSavePlan = useCallback(async () => {
     if (!plan || !destination) return;
 
     if (savedPlans.some(p => p.plan.tripTitle === plan.tripTitle)) {
@@ -62,11 +59,30 @@ function App() {
       endDate,
     };
     
-    const newPlans = [...savedPlans, newSavedPlan];
-    updateSavedPlans(newPlans);
-    alert('여행 계획이 저장되었습니다!');
+    try {
+        const updatedPlans = await savePlan(newSavedPlan);
+        setSavedPlans(updatedPlans);
+        alert('여행 계획이 저장되었습니다!');
+    } catch(e) {
+        console.error("Failed to save plan:", e);
+        alert('계획 저장에 실패했습니다.');
+    }
   }, [plan, destination, startDate, endDate, savedPlans]);
 
+  // ✨ handleDeletePlan을 수정하여 API를 통해 계획을 삭제합니다.
+  const handleDeletePlan = async (planId: number) => {
+    if (window.confirm('정말로 이 계획을 삭제하시겠습니까?')) {
+        try {
+            const updatedPlans = await apiDeletePlan(planId);
+            setSavedPlans(updatedPlans);
+        } catch(e) {
+            console.error("Failed to delete plan:", e);
+            alert('계획 삭제에 실패했습니다.');
+        }
+    }
+  };
+  
+  // ... (handleLoadPlan, handleAddMustVisit 등 나머지 핸들러 함수들은 기존과 동일)
   const handleLoadPlan = (planToLoad: SavedPlan) => {
     setPlan(planToLoad.plan);
     setDestination(planToLoad.destination);
@@ -78,14 +94,6 @@ function App() {
     setError(null);
     setIsSavedPlansModalOpen(false);
   };
-  
-  const handleDeletePlan = (planId: number) => {
-    if (window.confirm('정말로 이 계획을 삭제하시겠습니까?')) {
-        const newPlans = savedPlans.filter(p => p.id !== planId);
-        updateSavedPlans(newPlans);
-    }
-  };
-
 
   const handleAddMustVisit = () => {
     if (mustVisitInput.trim() && !mustVisitPlaces.includes(mustVisitInput.trim())) {
@@ -107,11 +115,9 @@ function App() {
         setError("종료일은 시작일보다 빠를 수 없습니다.");
         return;
     }
-
     setIsLoading(true);
     setError(null);
     setPlan(null);
-
     try {
       const generatedPlan = await generateTravelPlan(destination, startDate, endDate, mustVisitPlaces);
       setPlan(generatedPlan);
@@ -161,6 +167,7 @@ function App() {
   const FolderIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
 
   return (
+    // ... (JSX 렌더링 부분은 기존과 동일)
     <div className="min-h-screen bg-slate-50 text-gray-800">
       <header className="bg-white shadow-md sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -193,7 +200,6 @@ function App() {
       
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* ✨ 아래 aside 태그의 클래스를 수정했습니다. */}
           <aside className="lg:col-span-4 lg:bg-white lg:p-6 lg:rounded-2xl lg:shadow-lg lg:border lg:border-gray-200 self-start">
             <div className="space-y-6">
               <div>
@@ -283,7 +289,6 @@ function App() {
             </div>
           </aside>
 
-          {/* ✨ 아래 section 태그의 클래스를 수정했습니다. */}
           <section className="lg:col-span-8 lg:bg-white/50 lg:p-6 rounded-2xl min-h-[60vh] flex items-center justify-center">
              {searchResult || searchError || isSearching ? (
                  <div className="w-full">
