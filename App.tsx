@@ -164,7 +164,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 text-gray-800">
       <header className="bg-white shadow-md sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <h1 className="text-3xl font-bold text-rose-500 whitespace-nowrap">🌸 AI 일본 여행 플래너</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-rose-500 whitespace-nowrap">🌸 AI 일본 여행 플래너</h1>
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
               <button
                 onClick={() => setIsSavedPlansModalOpen(true)}
@@ -174,13 +174,13 @@ function App() {
               >
                 <FolderIcon className="w-6 h-6"/>
               </button>
-              <div className="relative w-full sm:w-auto sm:max-w-xs lg:max-w-sm">
+              <div className="relative w-full sm:max-w-xs lg:max-w-sm">
                   <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                      placeholder="'유니버셜 스튜디오 이용방법' 등 질문"
+                      placeholder="'유니버셜 스튜디오' 등 질문"
                       className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-rose-400 focus:border-transparent"
                   />
                   <button onClick={handleSearch} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-rose-500 rounded-full transition-colors">
@@ -193,7 +193,6 @@ function App() {
       
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Controls Section */}
           <aside className="lg:col-span-4 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 self-start">
             <div className="space-y-6">
               <div>
@@ -241,10 +240,10 @@ function App() {
                         value={mustVisitInput}
                         onChange={(e) => setMustVisitInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddMustVisit()}
-                        placeholder="예: 유아 동반, 해산물 맛집 위주"
+                        placeholder="예: 유아 동반, 맛집 위주"
                         className="flex-grow p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400 min-w-0"
                     />
-                    <button onClick={handleAddMustVisit} className="bg-rose-500 text-white p-2 rounded-md hover:bg-rose-600 transition-colors">
+                    <button onClick={handleAddMustVisit} className="bg-rose-500 text-white p-2 rounded-md hover:bg-rose-600 transition-colors flex-shrink-0">
                         <PlusIcon className="w-6 h-6"/>
                     </button>
                  </div>
@@ -271,13 +270,12 @@ function App() {
             </div>
           </aside>
 
-          {/* Display Section */}
-          <section className="lg:col-span-8 bg-white/50 p-6 rounded-2xl min-h-[60vh] flex items-center justify-center">
+          <section className="lg:col-span-8 bg-white/50 p-4 sm:p-6 rounded-2xl min-h-[60vh] flex items-center justify-center">
              {searchResult || searchError || isSearching ? (
                  <div className="w-full">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-2xl font-bold">검색 결과</h2>
-                      <button onClick={() => { setSearchResult(null); setSearchError(null); }} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 text-sm font-semibold">
+                    <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+                      <h2 className="text-xl sm:text-2xl font-bold">검색 결과</h2>
+                      <button onClick={() => { setSearchResult(null); setSearchError(null); }} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 text-sm font-semibold w-full sm:w-auto">
                           계획으로 돌아가기
                       </button>
                     </div>
@@ -290,10 +288,10 @@ function App() {
             ) : plan && destination ? (
               <PlanDisplay plan={plan} destination={destination} startDate={startDate} endDate={endDate} onSavePlan={handleSavePlan} />
             ) : (
-              <div className="text-center text-gray-500">
-                <div className="text-6xl mb-4">🗺️</div>
-                <h2 className="text-2xl font-bold mb-2">여행 계획을 생성해보세요!</h2>
-                <p>옵션을 선택하고 버튼을 누르면 AI가 맞춤 여행을 설계해 드립니다.</p>
+              <div className="text-center text-gray-500 px-4">
+                <div className="text-5xl sm:text-6xl mb-4">🗺️</div>
+                <h2 className="text-xl sm:text-2xl font-bold mb-2">여행 계획을 생성해보세요!</h2>
+                <p className="text-base">옵션을 선택하고 버튼을 누르면 AI가 맞춤 여행을 설계해 드립니다.</p>
               </div>
             )}
           </section>

@@ -41,12 +41,12 @@ const SavedPlansModal: React.FC<SavedPlansModalProps> = ({ isOpen, onClose, save
           ) : (
             <ul className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
               {savedPlans.map(savedPlan => (
-                <li key={savedPlan.id} className="bg-gray-50 p-4 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border border-gray-200">
-                  <div>
+                <li key={savedPlan.id} className="bg-gray-50 p-4 rounded-lg flex flex-wrap justify-between items-center gap-3 border border-gray-200">
+                  <div className="flex-grow">
                     <h3 className="font-bold text-rose-600">{savedPlan.plan.tripTitle}</h3>
                     <p className="text-sm text-gray-600">{savedPlan.destination} | {savedPlan.startDate} ~ {savedPlan.endDate}</p>
                   </div>
-                  <div className="flex gap-2 flex-shrink-0 self-end sm:self-center">
+                  <div className="flex gap-2 flex-shrink-0">
                     <button onClick={() => onLoadPlan(savedPlan)} className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm">
                       불러오기
                     </button>

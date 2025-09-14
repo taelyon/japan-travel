@@ -16,7 +16,7 @@ const IconMap: { [key: string]: React.FC<{className?: string}> } = {
   Transport: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>,
   Flight: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>,
   Save: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>,
-  Share: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.19.02.38.05.57.092m0 0a2.25 2.25 0 1 1-3.182 3.182m3.182-3.182a2.25 2.25 0 0 0 3.182 3.182M12 18a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5m0 0c.19.02.38.05.57.092m0 0a2.25 2.25 0 1 1-3.182-3.182m3.182 3.182a2.25 2.25 0 0 0 3.182-3.182m-3.182-3.182c-.19.02-.38.05-.57.092m0 0a2.25 2.25 0 1 1 3.182-3.182M12 6a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5m0 0c-.19.02-.38.05-.57.092m0 0a2.25 2.25 0 1 1 3.182 3.182" /></svg>,
+  Share: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.19.02.38.05.57.092m0 0a2.25 2.25 0 1 1-3.182 3.182m3.182-3.182a2.25 2.25 0 0 0 3.182 3.182M12 18a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5m0 0c.19.02.38.05.57.092m0 0a2.25 2.25 0 1 1-3.182-3.182m3.182 3.182a2.25 2.25 0 0 0 3.182-3.182m-3.182-3.182c-.19.02-.38.05-.57.092m0 0a2.25 2.25 0 1 1 3.182-3.182M12 6a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0 4.5m0 0c-.19.02-.38.05-.57.092m0 0a2.25 2.25 0 1 1 3.182 3.182" /></svg>,
 };
 const CalendarIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
 const ClockIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
@@ -87,10 +87,10 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
   };
 
   return (
-    <div className="space-y-12 w-full">
+    <div className="space-y-10 w-full">
       <header className="text-center relative pt-4">
-        <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight lg:text-4xl">{plan.tripTitle}</h1>
-         <div className="absolute top-0 right-0 flex items-center gap-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-800 tracking-tight">{plan.tripTitle}</h1>
+        <div className="flex items-center justify-center sm:justify-end gap-2 mt-4 sm:absolute sm:top-0 sm:right-0 sm:mt-0">
           <button
             onClick={onSavePlan}
             className="bg-white border border-rose-500 text-rose-500 p-2 rounded-full shadow-md hover:bg-rose-50 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
@@ -107,21 +107,21 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
           >
             <IconMap.Share className="w-6 h-6" />
           </button>
-          {copySuccess && <span className="absolute top-12 right-0 text-sm bg-gray-800 text-white px-2 py-1 rounded-md shadow-lg transition-opacity duration-300">{copySuccess}</span>}
+          {copySuccess && <span className="absolute -bottom-8 text-sm bg-gray-800 text-white px-2 py-1 rounded-md shadow-lg transition-opacity duration-300">{copySuccess}</span>}
         </div>
       </header>
       
       <section>
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
-          <CalendarIcon className="w-8 h-8 text-rose-500" />
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+          <CalendarIcon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
           상세 일정
         </h2>
         <div className="space-y-8">
           {plan.dailyItinerary.map((day, index) => (
-            <div key={index} className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <div key={index} className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
               <div className="mb-4">
-                <h3 className="text-2xl font-bold text-rose-600">{day.day} <span className="text-gray-500 font-medium text-xl">({day.date})</span></h3>
-                <p className="text-lg text-gray-600 italic">"{day.theme}"</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-rose-600">{day.day} <span className="text-gray-500 font-medium text-lg sm:text-xl">({day.date})</span></h3>
+                <p className="text-base sm:text-lg text-gray-600 italic">"{day.theme}"</p>
               </div>
               <div className="relative border-l-2 border-rose-200 ml-3 pl-6 space-y-6">
                 {day.schedule.map((item, i) => (
@@ -137,12 +137,12 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
         </div>
       </section>
 
-      <section className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
-              <IconMap.Flight className="w-8 h-8 text-rose-500" />
+      <section className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+              <IconMap.Flight className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
               항공권 조회
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">
               서울({departureAirport})에서 {destination}({destinationAirport})까지의 {startDate} ~ {endDate} 기간 항공권을 확인해보세요.
           </p>
           <a
@@ -169,9 +169,9 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
         />
       </div>
 
-       <section className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
-             <IconMap.Transport className="w-8 h-8 text-rose-500" />
+       <section className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+             <IconMap.Transport className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
             교통편 가이드
           </h2>
           <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{plan.transportationGuide}</p>
@@ -195,9 +195,9 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ title, Icon, it
     };
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
-                <Icon className="w-8 h-8 text-rose-500" />
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 border-b-4 border-rose-400 pb-2 flex items-center gap-3">
+                <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
                 {title}
             </h2>
             <ul className="space-y-2">
@@ -211,9 +211,9 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ title, Icon, it
                       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleItemClick(item)}
                       title={`${item.name} 정보 Google 지도에서 보기`}
                     >
-                        <h4 className="font-bold text-lg text-gray-800">{item.name}</h4>
+                        <h4 className="font-bold text-base sm:text-lg text-gray-800">{item.name}</h4>
                         <p className="text-sm text-gray-500">{item.area}{'priceRange' in item && ` - ${item.priceRange}`}</p>
-                        <p className="text-gray-600 mt-1 whitespace-pre-wrap">{item.notes}</p>
+                        <p className="text-gray-600 mt-1 whitespace-pre-wrap text-sm sm:text-base">{item.notes}</p>
                     </li>
                 ))}
             </ul>
