@@ -15,7 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     if (action === 'getPlans') {
-      const { blobs } = await list({ prefix: 'plans/', mode: 'folded' });
+      const { blobs } = await list({ prefix: 'plans/' });
       const plans: SavedPlan[] = await Promise.all(
         blobs.map(async (blob) => {
           const response = await fetch(blob.url);
@@ -31,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const fileName = `plans/${newPlan.id}.json`;
       await put(fileName, JSON.stringify(newPlan), { access: 'public', contentType: 'application/json' });
       
-      const { blobs } = await list({ prefix: 'plans/', mode: 'folded' });
+      const { blobs } = await list({ prefix: 'plans/' });
       const plans: SavedPlan[] = await Promise.all(blobs.map(async (blob) => (await fetch(blob.url)).json()));
       plans.sort((a, b) => b.id - a.id);
       return res.status(200).json(plans);
@@ -39,13 +39,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     if (action === 'deletePlan') {
       const { planId } = payload;
-      const { blobs } = await list({ prefix: `plans/${planId}.json`, mode: 'folded' });
+      const { blobs } = await list({ prefix: `plans/${planId}.json` });
       
       if(blobs.length > 0) {
         await del(blobs.map(blob => blob.url));
       }
 
-      const updatedBlobs = (await list({ prefix: 'plans/', mode: 'folded' })).blobs;
+      const updatedBlobs = (await list({ prefix: 'plans/' })).blobs;
       const plans: SavedPlan[] = await Promise.all(updatedBlobs.map(async (blob) => (await fetch(blob.url)).json()));
       plans.sort((a, b) => b.id - a.id);
       return res.status(200).json(plans);
