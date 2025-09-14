@@ -37,18 +37,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(plans);
     }
     
+    // 'deletePlan' 액션 부분을 아래 코드로 교체하세요.
     if (action === 'deletePlan') {
       const { planId } = payload;
-      const { blobs } = await list({ prefix: `plans/${planId}.json` });
+      console.log(`[deletePlan] Received request to delete planId: ${planId}`);
+
+      const fileToDelete = `plans/${planId}.json`;
+      console.log(`[deletePlan] Attempting to list blob with prefix: ${fileToDelete}`);
+      
+      const { blobs } = await list({ prefix: fileToDelete });
       
       if (blobs.length > 0) {
-        // del 함수는 URL 배열을 받아 처리합니다.
-        await del(blobs.map(blob => blob.url));
+        console.log(`[deletePlan] Found ${blobs.length} blob(s) to delete.`);
+        const urlsToDelete = blobs.map(blob => blob.url);
+        console.log('[deletePlan] URLs to delete:', urlsToDelete);
+
+        try {
+          await del(urlsToDelete);
+          console.log('[deletePlan] Deletion successful.');
+        } catch (deleteError) {
+          console.error('[deletePlan] Error during deletion:', deleteError);
+          // 에러가 발생해도 일단 계속 진행하여 목록을 다시 불러옵니다.
+        }
+
+      } else {
+        console.warn(`[deletePlan] No blobs found with prefix: ${fileToDelete}. Nothing to delete.`);
       }
 
+      // 항상 최신 목록을 다시 불러와 반환
+      console.log('[deletePlan] Refetching all plans to return updated list.');
       const updatedBlobs = (await list({ prefix: 'plans/' })).blobs;
       const plans: SavedPlan[] = await Promise.all(updatedBlobs.map(async (blob) => (await fetch(blob.url)).json()));
       plans.sort((a, b) => b.id - a.id);
+      
+      console.log(`[deletePlan] Returning ${plans.length} plans.`);
       return res.status(200).json(plans);
     }
 
