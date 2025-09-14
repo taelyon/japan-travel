@@ -225,10 +225,22 @@ function App() {
                     <span className="text-sm text-rose-600 font-bold">{tripDuration}</span>
                   )}
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 items-center">
-                  <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} min={today} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400"/>
-                  <span className="text-gray-500 font-semibold hidden sm:block">~</span>
-                  <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} min={startDate || today} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400"/>
+                <div className="flex flex-row gap-2 items-center">
+                  <input 
+                    type="date" 
+                    value={startDate} 
+                    onChange={e => setStartDate(e.target.value)} 
+                    min={today} 
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400"
+                  />
+                  <span className="text-gray-500 font-semibold">~</span>
+                  <input 
+                    type="date" 
+                    value={endDate} 
+                    onChange={e => setEndDate(e.target.value)} 
+                    min={startDate || today} 
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400"
+                  />
                 </div>
               </div>
 
