@@ -13,7 +13,7 @@
     "types": [
       "node"
     ],
-    "moduleResolution": "bundler",
+    "moduleResolution": "nodenext",  /* 수정된 부분 */
     "isolatedModules": true,
     "moduleDetection": "force",
     "allowJs": true,
@@ -23,7 +23,7 @@
         "./*"
       ]
     },
-    "allowImportingTsExtensions": true,
+    /* "allowImportingTsExtensions": true, 이 줄을 삭제했습니다. */
     "noEmit": true
   }
 }
