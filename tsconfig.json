@@ -1,22 +1,18 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "experimentalDecorators": true,
-    "useDefineForClassFields": false,
-    "module": "ESNext",
     "lib": [
       "ES2022",
       "DOM",
       "DOM.Iterable"
     ],
-    "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
+    "module": "ESNext",
     "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "isolatedModules": true,
     "allowJs": true,
-    "jsx": "react-jsx",
     "paths": {
       "@/*": [
         "./*"
