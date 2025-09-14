@@ -37,35 +37,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(plans);
     }
     
-    // 'deletePlan' 액션 부분을 아래 코드로 교체하세요.
+    // 'deletePlan' 액션 부분을 아래의 최종 코드로 교체하세요.
     if (action === 'deletePlan') {
       const { planId } = payload;
       console.log(`[deletePlan] Received request to delete planId: ${planId}`);
 
+      // 1. 삭제할 파일의 전체 경로를 직접 생성합니다.
       const fileToDelete = `plans/${planId}.json`;
-      console.log(`[deletePlan] Attempting to list blob with prefix: ${fileToDelete}`);
       
-      const { blobs } = await list({ prefix: fileToDelete });
-      
-      if (blobs.length > 0) {
-        console.log(`[deletePlan] Found ${blobs.length} blob(s) to delete.`);
-        const urlsToDelete = blobs.map(blob => blob.url);
-        console.log('[deletePlan] URLs to delete:', urlsToDelete);
-
-        try {
-          await del(urlsToDelete);
-          console.log('[deletePlan] Deletion successful.');
-        } catch (deleteError) {
-          console.error('[deletePlan] Error during deletion:', deleteError);
-          // 에러가 발생해도 일단 계속 진행하여 목록을 다시 불러옵니다.
-        }
-
-      } else {
-        console.warn(`[deletePlan] No blobs found with prefix: ${fileToDelete}. Nothing to delete.`);
+      try {
+        // 2. list를 거치지 않고 del 함수에 파일 경로를 바로 전달하여 삭제합니다.
+        await del(fileToDelete);
+        console.log(`[deletePlan] Deletion successful for: ${fileToDelete}`);
+      } catch (deleteError) {
+        console.error(`[deletePlan] Error during deletion for ${fileToDelete}:`, deleteError);
       }
 
-      // 항상 최신 목록을 다시 불러와 반환
-      console.log('[deletePlan] Refetching all plans to return updated list.');
+      // 3. 삭제 후 최신 목록을 다시 불러와 클라이언트에 반환합니다.
       const updatedBlobs = (await list({ prefix: 'plans/' })).blobs;
       const plans: SavedPlan[] = await Promise.all(updatedBlobs.map(async (blob) => (await fetch(blob.url)).json()));
       plans.sort((a, b) => b.id - a.id);
