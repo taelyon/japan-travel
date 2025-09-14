@@ -1,0 +1,5 @@
+{
+  "name": "AI 일본 여행 플래너",
+  "description": "An AI-powered travel planner for trips to Japan. Select your destination, dates, and must-see spots to generate a personalized itinerary including recommendations for transportation, hotels, and restaurants. Also features a search function for specific travel queries.",
+  "requestFramePermissions": []
+}
