@@ -16,13 +16,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // --- API 키 확인 로직을 핸들러 함수 안으로 이동 ---
   const API_KEY = process.env.GEMINI_API_KEY;
   if (!API_KEY) {
     console.error("GEMINI_API_KEY environment variable not set");
     return res.status(500).json({ error: "서버 설정에 오류가 발생했습니다. 관리자에게 문의하세요." });
   }
-  // --- 수정 완료 ---
 
   const genAI = new GoogleGenerativeAI(API_KEY);
   const model = genAI.getGenerativeModel({
@@ -73,7 +71,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const textResponse = result.response.text();
 
       try {
-        const parsedJson: TravelPlan = JSON.parse(textResponse);
+        // --- ✨ 여기가 바로 수정한 부분입니다! ✨ ---
+        // 마크다운 코드 블록(` ```json ` 과 ` ``` `)을 제거합니다.
+        const cleanedResponse = textResponse.replace(/^```json\s*|```\s*$/g, '');
+        // 깨끗해진 텍스트를 파싱합니다.
+        const parsedJson: TravelPlan = JSON.parse(cleanedResponse);
+        // --- 수정 완료 ---
+        
         return res.status(200).json(parsedJson);
       } catch(e) {
         console.error("AI 응답을 JSON으로 파싱하는데 실패했습니다:", textResponse);
