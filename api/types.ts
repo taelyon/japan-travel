@@ -21,6 +21,7 @@ export interface Recommendation {
     name: string;
     area: string;
     notes: string;
+    rating: number;
 }
 
 export interface HotelRecommendation extends Recommendation {

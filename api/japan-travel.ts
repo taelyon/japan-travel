@@ -37,21 +37,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(plans);
     }
     
-    // 'deletePlan' 액션 부분을 아래의 최종 코드로 교체하세요.
     if (action === 'deletePlan') {
       const { planId } = payload;
       const filePathToDelete = `plans/${planId}.json`;
       console.log(`[deletePlan] Request to delete path: ${filePathToDelete}`);
 
       try {
-        // 1. 'plans/' 폴더의 모든 blob을 불러옵니다.
         const { blobs } = await list({ prefix: 'plans/' });
         
-        // 2. 전체 목록에서 삭제할 파일 경로와 일치하는 blob을 찾습니다.
         const blobToDelete = blobs.find(blob => blob.pathname === filePathToDelete);
 
         if (blobToDelete) {
-          // 3. 찾은 blob의 전체 URL을 사용하여 삭제합니다.
           await del(blobToDelete.url);
           console.log(`[deletePlan] Deletion successful for URL: ${blobToDelete.url}`);
         } else {
@@ -61,7 +57,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error(`[deletePlan] Error during deletion process for ${filePathToDelete}:`, error);
       }
 
-      // 4. 삭제 후, 최신화된 전체 목록을 다시 불러와 클라이언트에 반환합니다.
       const updatedBlobs = (await list({ prefix: 'plans/' })).blobs;
       const plans: SavedPlan[] = await Promise.all(updatedBlobs.map(async (blob) => (await fetch(blob.url)).json()));
       plans.sort((a, b) => b.id - a.id);
@@ -70,7 +65,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(plans);
     }
 
-    // --- 이하 Gemini API 관련 코드는 동일 ---
     const API_KEY = process.env.GEMINI_API_KEY;
     if (!API_KEY) {
       return res.status(500).json({ error: "서버에 API 키가 설정되지 않았습니다." });
@@ -103,14 +97,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             ${mustVisitText}
             ${hotelInstruction}
             **숙소와 맛집은 다양한 선택지를 제공할 수 있도록 각각 최소 5개 이상 추천해주세요.**
+            **모든 숙소와 맛집 추천에는 5점 만점의 평점(rating)을 반드시 포함하고, 평점이 높은 순서대로 정렬해주세요.**
             논리적이고 효율적인 동선으로 일정을 계획하고, 모든 필수 방문 장소를 포함해야 합니다. 실용적이고 유용한 팁도 함께 제공해주세요.
             결과는 반드시 아래와 같은 순수한 JSON 형식으로만 제공해야 합니다. 다른 설명이나 markdown 포맷 없이 오직 JSON 객체만 반환해주세요.
             {
               "tripTitle": "여행 제목",
-              "dailyItinerary": [{ "day": "1일차", "date": "YYYY-MM-DD", "theme": "테마", "schedule": [{ "time": "HH:MM", "activity": "활동", "description": "활동 및 방문 장소에 대한 구체적인 설명, 예상 소요 시간, 팁 등을 5줄 이상 상세하게 작성해주세요." }] }],
-              "hotelRecommendations": [{ "name": "호텔 이름", "area": "지역", "priceRange": "가격대", "notes": "추천 이유" }],
+              "dailyItinerary": [{ "day": "1일차", "date": "YYYY-MM-DD", "theme": "테마", "schedule": [{ "time": "HH:MM", "activity": "활동", "description": "활동에 대한 구체적인 설명, 예상 소요 시간, 팁 등을 두 문장 이상으로 상세하게 작성해주세요." }] }],
+              "hotelRecommendations": [{ "name": "호텔 이름", "area": "지역", "priceRange": "가격대", "rating": 5, "notes": "추천 이유" }],
               "transportationGuide": "교통편 안내",
-              "restaurantRecommendations": [{ "name": "음식점 이름", "area": "지역", "notes": "추천 메뉴" }]
+              "restaurantRecommendations": [{ "name": "음식점 이름", "area": "지역", "rating": 5, "notes": "추천 메뉴" }]
             }
         `;
 
