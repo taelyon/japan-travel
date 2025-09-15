@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import type { TravelPlan, Recommendation, HotelRecommendation, Destination } from '../types';
 import { DESTINATION_AIRPORTS } from '../constants';
 
-// ... (IconMap, CalendarIcon, ClockIcon, formatPlanForSharing 등은 기존과 동일)
+interface PlanDisplayProps {
+  plan: TravelPlan;
+  startDate: string;
+  endDate: string;
+  destination: Destination;
+  onSavePlan: () => void;
+}
+
 const IconMap: { [key: string]: React.FC<{className?: string}> } = {
-  Hotel: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="http://www.w3.org/2000/svg" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0v-4a2 2 0 012-2h6a2 2 0 012 2v4m-6 0h-2" /></svg>,
-  Restaurant: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="http://www.w3.org/2000/svg" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18M3 7h18M3 11h18M3 15h18M3 19h18" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2v20" /></svg>,
-  Transport: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="http://www.w3.org/2000/svg" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>,
+  Hotel: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0v-4a2 2 0 012-2h6a2 2 0 012 2v4m-6 0h-2" /></svg>,
+  Restaurant: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18M3 7h18M3 11h18M3 15h18M3 19h18" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2v20" /></svg>,
+  Transport: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>,
   Flight: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>,
   Save: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>,
   Share: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.19.02.38.05.57.092m0 0a2.25 2.25 0 1 1-3.182 3.182m3.182-3.182a2.25 2.25 0 0 0 3.182 3.182M12 18a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5m0 0c.19.02.38.05.57.092m0 0a2.25 2.25 0 1 1-3.182-3.182m3.182 3.182a2.25 2.25 0 0 0 3.182-3.182m-3.182-3.182c-.19.02-.38.05-.57.092m0 0a2.25 2.25 0 1 1 3.182-3.182M12 6a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0 4.5m0 0c-.19.02-.38.05-.57.092m0 0a2.25 2.25 0 1 1 3.182 3.182" /></svg>,
@@ -30,13 +37,13 @@ const formatPlanForSharing = (plan: TravelPlan, destination: Destination, startD
 
     text += "--- **추천 숙소** ---\n";
     plan.hotelRecommendations.forEach(hotel => {
-        text += `- ${hotel.name} (평점: ${hotel.rating}/5, ${hotel.area}, ${hotel.priceRange}) - ${hotel.notes}\n`;
+        text += `- ${hotel.name} (${hotel.area}, ${hotel.priceRange}) - ${hotel.notes}\n`;
     });
     text += "\n";
     
     text += "--- **추천 맛집** ---\n";
     plan.restaurantRecommendations.forEach(resto => {
-        text += `- ${resto.name} (평점: ${resto.rating}/5, ${resto.area}) - ${resto.notes}\n`;
+        text += `- ${resto.name} (${resto.area}) - ${resto.notes}\n`;
     });
     text += "\n";
 
@@ -46,7 +53,7 @@ const formatPlanForSharing = (plan: TravelPlan, destination: Destination, startD
     return text;
 };
 
-// ... (PlanDisplay 컴포넌트의 나머지 부분은 기존과 동일)
+
 const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, destination, onSavePlan }) => {
   const [copySuccess, setCopySuccess] = useState('');
 
@@ -174,7 +181,6 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
   );
 };
 
-
 interface RecommendationCardProps {
     title: string;
     Icon: React.FC<{className?: string}>;
@@ -189,6 +195,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ title, Icon, it
     };
 
     return (
+        // ✨ 이 부분의 클래스를 수정했습니다.
         <div className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-md sm:border sm:border-gray-200">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
                 <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
@@ -205,10 +212,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ title, Icon, it
                       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleItemClick(item)}
                       title={`${item.name} 정보 Google 지도에서 보기`}
                     >
-                        <div className="flex justify-between items-start">
-                          <h4 className="font-bold text-base sm:text-lg text-gray-800">{item.name}</h4>
-                          <span className="text-yellow-500 font-bold text-sm">{'⭐'.repeat(item.rating)}</span>
-                        </div>
+                        <h4 className="font-bold text-base sm:text-lg text-gray-800">{item.name}</h4>
                         <p className="text-sm text-gray-500">{item.area}{'priceRange' in item && ` - ${item.priceRange}`}</p>
                         <p className="text-gray-600 mt-1 whitespace-pre-wrap text-sm sm:text-base">{item.notes}</p>
                     </li>
