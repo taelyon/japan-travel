@@ -107,7 +107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             결과는 반드시 아래와 같은 순수한 JSON 형식으로만 제공해야 합니다. 다른 설명이나 markdown 포맷 없이 오직 JSON 객체만 반환해주세요.
             {
               "tripTitle": "여행 제목",
-              "dailyItinerary": [{ "day": "1일차", "date": "YYYY-MM-DD", "theme": "테마", "schedule": [{ "time": "HH:MM", "activity": "활동", "description": "활동에 대한 구체적인 설명, 예상 소요 시간, 팁 등을 두 문장 이상으로 상세하게 작성해주세요." }] }],
+              "dailyItinerary": [{ "day": "1일차", "date": "YYYY-MM-DD", "theme": "테마", "schedule": [{ "time": "HH:MM", "activity": "활동", "description": "활동 및 방문장소에 대한 구체적인 설명, 예상 소요 시간, 팁 등을 상세하게 작성해주세요." }] }],
               "hotelRecommendations": [{ "name": "호텔 이름", "area": "지역", "priceRange": "가격대", "notes": "추천 이유" }],
               "transportationGuide": "교통편 안내",
               "restaurantRecommendations": [{ "name": "음식점 이름", "area": "지역", "notes": "추천 메뉴" }]
