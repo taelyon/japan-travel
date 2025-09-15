@@ -42,4 +42,5 @@ export interface SavedPlan {
   destination: Destination;
   startDate: string;
   endDate: string;
+  mustVisitPlaces: string[]; // 여행 조건 추가
 }

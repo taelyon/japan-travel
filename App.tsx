@@ -12,7 +12,6 @@ import SearchResultDisplay from './components/SearchResultDisplay';
 const today = new Date().toISOString().split('T')[0];
 
 function App() {
-  // ... (기존 상태 변수 선언은 그대로)
   const [destination, setDestination] = useState<Destination | null>(null);
   const [startDate, setStartDate] = useState<string>(today);
   const [endDate, setEndDate] = useState<string>('');
@@ -28,7 +27,6 @@ function App() {
   const [savedPlans, setSavedPlans] = useState<SavedPlan[]>([]);
   const [isSavedPlansModalOpen, setIsSavedPlansModalOpen] = useState(false);
 
-  // ✨ useEffect를 수정하여 API에서 저장된 계획을 불러옵니다.
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -36,13 +34,11 @@ function App() {
         setSavedPlans(plans);
       } catch (e) {
         console.error("Failed to load saved plans:", e);
-        // 사용자에게 에러를 알려주는 로직을 추가할 수 있습니다.
       }
     };
     fetchPlans();
   }, []);
 
-  // ✨ handleSavePlan을 수정하여 API를 통해 계획을 저장합니다.
   const handleSavePlan = useCallback(async () => {
     if (!plan || !destination) return;
 
@@ -57,6 +53,7 @@ function App() {
       destination,
       startDate,
       endDate,
+      mustVisitPlaces,
     };
     
     try {
@@ -67,9 +64,8 @@ function App() {
         console.error("Failed to save plan:", e);
         alert('계획 저장에 실패했습니다.');
     }
-  }, [plan, destination, startDate, endDate, savedPlans]);
+  }, [plan, destination, startDate, endDate, savedPlans, mustVisitPlaces]);
 
-  // ✨ handleDeletePlan을 수정하여 API를 통해 계획을 삭제합니다.
   const handleDeletePlan = async (planId: number) => {
     if (window.confirm('정말로 이 계획을 삭제하시겠습니까?')) {
         try {
@@ -82,13 +78,12 @@ function App() {
     }
   };
   
-  // ... (handleLoadPlan, handleAddMustVisit 등 나머지 핸들러 함수들은 기존과 동일)
   const handleLoadPlan = (planToLoad: SavedPlan) => {
     setPlan(planToLoad.plan);
     setDestination(planToLoad.destination);
     setStartDate(planToLoad.startDate);
     setEndDate(planToLoad.endDate);
-    setMustVisitPlaces([]);
+    setMustVisitPlaces(planToLoad.mustVisitPlaces || []);
     setSearchResult(null);
     setSearchError(null);
     setError(null);
@@ -167,7 +162,6 @@ function App() {
   const FolderIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
 
   return (
-    // ... (JSX 렌더링 부분은 기존과 동일)
     <div className="min-h-screen bg-slate-50 text-gray-800">
       <header className="bg-white shadow-md sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
