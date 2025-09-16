@@ -20,6 +20,8 @@ const IconMap: { [key: string]: React.FC<{className?: string}> } = {
 };
 const CalendarIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
 const ClockIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const TransportIcon: React.FC<{className?: string}> = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m0 0v2.25m0-2.25h1.5m-1.5 0H5.25m11.25 0v2.25m0-2.25h-1.5m1.5 0h-1.5m-3.75 0H6.75m11.25-3.75H18m-3.75 0h-1.5m-6 0H6.75M12 3v3.75m0 0h1.5m-1.5 0H9.75m4.5 0v3.75m0 0h-1.5m1.5 0h1.5m-12 0v3.75m0 0h1.5m-1.5 0H3.75m14.25-3.75v3.75m0 0h-1.5m1.5 0h1.5M4.5 21v-3.75m0 0h1.5m-1.5 0H3.75m15.75 0v-3.75m0 0h-1.5m1.5 0h1.5M9 21v-3.75m0 0h1.5m-1.5 0H6.75m9 3.75v-3.75m0 0h-1.5m1.5 0h1.5" /></svg>;
+
 
 const formatPlanForSharing = (plan: TravelPlan, destination: Destination, startDate: string, endDate: string): string => {
     let text = `🌸 **${plan.tripTitle}** 🌸\n\n`;
@@ -31,6 +33,7 @@ const formatPlanForSharing = (plan: TravelPlan, destination: Destination, startD
         text += `**${day.day} (${day.date}): ${day.theme}**\n`;
         day.schedule.forEach(item => {
             text += `  - **${item.time}**: ${item.activity} (${item.description})\n`;
+            text += `    - 🚌 교통: ${item.transportation}\n`;
         });
         text += "\n";
     });
@@ -129,6 +132,7 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, startDate, endDate, des
                      <div className="absolute -left-[34px] top-1.5 w-4 h-4 bg-white rounded-full border-2 border-rose-500"></div>
                      <p className="font-semibold text-gray-800 flex items-center gap-2"><ClockIcon className="w-5 h-5 text-gray-500"/>{item.time} - {item.activity}</p>
                      <p className="text-gray-600 pl-1">{item.description}</p>
+                     <p className="mt-1 text-sm text-blue-600 bg-blue-50 p-2 rounded-md flex items-start gap-2"><TransportIcon className="w-5 h-5 mt-0.5 flex-shrink-0"/>{item.transportation}</p>
                   </div>
                 ))}
               </div>

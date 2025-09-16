@@ -8,6 +8,7 @@ export interface ScheduleItem {
   time: string;
   activity: string;
   description: string;
+  transportation: string; // 상세 교통편 정보
 }
 
 export interface DailyPlan {
